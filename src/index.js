@@ -36,7 +36,7 @@ app.post('/users', checksExistsUserAccount, (request, response) => {
     todos: []
   }
 
-  users.push()
+  users.push(user)
 
   return response.json(user)
 });
@@ -45,12 +45,31 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
   // Complete aqui
   const {username} = request.headers;
 
+  const user = users.find(user => user.username === username)
 
-  const user = 
+  const tasks = user.todos
+
+  return response.json(user)
+
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+  const {username} = request.headers;
+  
+  const{title, deadline} = request.body;
+  
+  const user = request.user;
+
+  const todo = {
+    id: uuidv4(),
+    title,
+    done:false,
+    deadline: new Date(deadline),
+    createdAt: new Date()
+  }
+
+  user.todo.push()
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
