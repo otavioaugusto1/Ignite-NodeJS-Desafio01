@@ -25,9 +25,15 @@ function checksExistsUserAccount(request, response, next) {
   return next()
 }
 
-app.post('/users', checksExistsUserAccount, (request, response) => {
+app.post('/users',  (request, response) => {
   // Complete aqui
   const {name, username} = request.body;
+
+  const userExists = users.find(user => user.username === username)
+
+  if(userExists){
+    return response.status(400).json({error:"User already exists"})
+  }
   
   const user = {
     id: uuidv4(),
@@ -38,24 +44,20 @@ app.post('/users', checksExistsUserAccount, (request, response) => {
 
   users.push(user)
 
-  return response.json(user)
+  return response.status(201).json(user)
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
   // Complete aqui
-  const {username} = request.headers;
+  const user = request;
 
-  const user = users.find(user => user.username === username)
 
-  const tasks = user.todos
-
-  return response.json(user)
+  return response.json(user.todos);
 
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
   // Complete aqui
-  const {username} = request.headers;
   
   const{title, deadline} = request.body;
   
@@ -69,7 +71,8 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
     createdAt: new Date()
   }
 
-  user.todo.push()
+  user.todos.push(todo)
+  return response.status(201).json(todo)
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
